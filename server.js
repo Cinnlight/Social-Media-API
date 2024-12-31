@@ -3,9 +3,12 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 
-// Import the two parts of a GraphQL schema
-const { typeDefs, resolvers } = require('./server/schemas');
+// Import the two parts of a GraphQL schema correctly
+const typeDefs = require('./server/schemas/typeDefs');
+const resolvers = require('./server/schemas/resolvers');
+
 const db = require('./server/config/connection');
+const routes = require('./server/routes');
 
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
@@ -21,6 +24,8 @@ const startApolloServer = async () => {
   
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+
+  app.use(routes); // Integrate Express API routes under '/api'
 
   app.use('/graphql', expressMiddleware(server));
 
