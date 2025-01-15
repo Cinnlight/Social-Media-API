@@ -1,9 +1,7 @@
 const express = require('express');
-// Import the ApolloServer class and expressMiddleware helper function
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 
-// Import the two parts of a GraphQL schema correctly
 const typeDefs = require('./server/schemas/typeDefs');
 const resolvers = require('./server/schemas/resolvers');
 
@@ -25,9 +23,9 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(routes); // Integrate Express API routes under '/api'
-
   app.use('/graphql', expressMiddleware(server));
+
+  app.use(routes);
 
   db.once('open', () => {
     app.listen(PORT, () => {
